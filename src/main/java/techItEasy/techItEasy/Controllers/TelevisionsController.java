@@ -1,11 +1,20 @@
 package techItEasy.techItEasy.Controllers;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import techItEasy.techItEasy.Models.Televisions;
+import techItEasy.techItEasy.Repositories.TelevisionsRepository;
+
+import java.util.Optional;
 
 @RestController
 public class TelevisionsController {
+
+@Autowired
+    TelevisionsRepository televisionsRepository;
+
 
     @GetMapping("/televisions/{id}")
     public ResponseEntity<Object> getTelevisions(@PathVariable int id) {
@@ -18,7 +27,8 @@ public class TelevisionsController {
     }
 
     @PostMapping("/televisions")
-    public ResponseEntity<Object> postTelevisions(@RequestBody String television){
+    public ResponseEntity<Object> createTelevisions(@RequestBody Televisions televisions){
+        televisionsRepository.save(televisions);
         return ResponseEntity.created(null).body("television");
     }
 
@@ -29,6 +39,15 @@ public class TelevisionsController {
 
     @PutMapping("/televisions{id}")
     public ResponseEntity<Object> updateTelevision (@PathVariable int id, @RequestBody String televisions){
+        Optional<Televisions> optionalTelevisions = televisionsRepository.findById(id);
+        if (optionalTelevisions.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }else {
+            Televisions updateTelevision = optionalTelevisions.get();
+
+
+        }
+
         return ResponseEntity.noContent().build();
     }
 
